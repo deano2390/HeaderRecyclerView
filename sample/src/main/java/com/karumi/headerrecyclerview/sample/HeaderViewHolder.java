@@ -18,24 +18,15 @@ package com.karumi.headerrecyclerview.sample;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import com.github.pedrovgs.nox.NoxItem;
-import com.github.pedrovgs.nox.NoxView;
-import java.util.List;
 
 /**
  * RecyclerView.ViewHolder extension created to render a DragonBallHeader instance.
  */
 public class HeaderViewHolder extends RecyclerView.ViewHolder {
 
-  private final NoxView noxView;
+    public HeaderViewHolder(View itemView) {
+        super(itemView);
 
-  public HeaderViewHolder(View itemView) {
-    super(itemView);
-    this.noxView = (NoxView) itemView.findViewById(R.id.nox_view);
-  }
+    }
 
-  public void render(DragonBallHeader header) {
-    List<NoxItem> noxItems = header.getDragonBallCharacters();
-    noxView.showNoxItems(noxItems);
-  }
 }

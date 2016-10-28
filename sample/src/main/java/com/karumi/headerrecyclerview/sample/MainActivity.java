@@ -17,13 +17,12 @@
 package com.karumi.headerrecyclerview.sample;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import com.github.pedrovgs.nox.NoxItem;
-import com.karumi.headerrecyclerview.HeaderRecyclerViewAdapter;
+
 import com.karumi.headerrecyclerview.HeaderSpanSizeLookup;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,55 +32,19 @@ public class MainActivity extends AppCompatActivity {
   private static final int FIVE_SECONDS = 5000;
 
   private RecyclerView recyclerView;
-  private HeaderRecyclerViewAdapter adapter;
-  private boolean loading;
-  private boolean hasMore = true;
+  private DragonBallAdapter adapter;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main_activity);
     initializeRecyclerView();
-    fillRecyclerView();
-    hookLoadMoreListener();
   }
 
-  private void hookLoadMoreListener() {
-    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-      @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-        super.onScrollStateChanged(recyclerView, newState);
-        int visibleItemCount = recyclerView.getChildCount();
-        GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
-        int totalItemCount = layoutManager.getItemCount();
-        int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
-        int visibleThreshold = 5;
-        boolean isCloseToTheEnd =
-            (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold);
-        if (!loading && isCloseToTheEnd && hasMore) {
-          loadMore();
-        }
-      }
-    });
-  }
 
-  private void loadMore() {
-    loading = true;
-    new Handler().postDelayed(new Runnable() {
-      @Override public void run() {
-        adapter.hideFooter();
-        List<DragonBallCharacter> originalCharacters = getDragonBallCharacters();
-        List<DragonBallCharacter> characters =
-            new ArrayList<DragonBallCharacter>(originalCharacters);
-        characters.addAll(originalCharacters);
-        adapter.setItems(characters);
-        adapter.notifyDataSetChanged();
-        loading = false;
-        hasMore = false;
-      }
-    }, FIVE_SECONDS);
-  }
 
   private void initializeRecyclerView() {
-    adapter = new DragonBallAdapter();
+    adapter = new DragonBallAdapter(getDragonBallCharacters());
+    adapter.setShowHeader(true);
     recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
     recyclerView.setHasFixedSize(true);
     GridLayoutManager layoutManager = new GridLayoutManager(this, NUMBER_OF_COLUMNS);
@@ -89,16 +52,6 @@ public class MainActivity extends AppCompatActivity {
     layoutManager.setSpanSizeLookup(headerSpanSizeLookup);
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.setAdapter(adapter);
-  }
-
-  private void fillRecyclerView() {
-    List<DragonBallCharacter> characters = getDragonBallCharacters();
-    DragonBallHeader header = getHeader(characters);
-    DragonBallFooter footer = getFooter();
-    adapter.setHeader(header);
-    adapter.setItems(characters);
-    adapter.setFooter(footer);
-    adapter.notifyDataSetChanged();
   }
 
   private List<DragonBallCharacter> getDragonBallCharacters() {
@@ -140,18 +93,4 @@ public class MainActivity extends AppCompatActivity {
     return characters;
   }
 
-  private DragonBallHeader getHeader(List<DragonBallCharacter> characters) {
-    List<NoxItem> noxItems = new ArrayList<NoxItem>();
-    for (int i = 0; i < 3; i++) {
-      for (DragonBallCharacter character : characters) {
-        noxItems.add(new NoxItem(character.getPhoto()));
-      }
-    }
-    return new DragonBallHeader(noxItems);
-  }
-
-  public DragonBallFooter getFooter() {
-    String loadMoreMessage = getString(R.string.load_more_message);
-    return new DragonBallFooter(loadMoreMessage);
-  }
 }

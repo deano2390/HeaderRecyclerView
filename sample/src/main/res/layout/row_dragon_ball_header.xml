@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2015 Karumi.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,13 +14,10 @@
   ~ limitations under the License.
   -->
 
-<com.github.pedrovgs.nox.NoxView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:nox="http://schemas.android.com/apk/res-auto"
+<View xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/nox_view"
     android:layout_width="match_parent"
     android:layout_height="@dimen/header_row_height"
-    android:background="@mipmap/bg_dragon_ball_header"
-    nox:shape="fixed_circular_shape"
-    nox:item_margin="@dimen/nox_item_margin"
-    nox:item_placeholder="@mipmap/ball"/>
+    android:background="@color/accent_material_light"
+
+    />
