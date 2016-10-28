@@ -131,6 +131,9 @@ public abstract class HeaderRecyclerViewAdapter<VH extends RecyclerView.ViewHold
             return view_TYPE_HEADER;
         }
 
+        if(showHeader) // compoensate for off by 1
+            position--;
+
         return getRealItemViewType(position);
     }
 
